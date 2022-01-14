@@ -30,7 +30,15 @@ function BookmarkDetails() {
     //   })
 
   }, [index]);
-  const handleDelete = () => {};
+  const handleDelete = () => {
+    axios.delete(`${process.env.REACT_APP_API_URL_FROM_OUR_BACKEND}/bookmarks/${index}`)
+      .then((res)=>{
+        // navigate back to the homepage after it's been deleted
+        navigate("/bookmarks")
+      }).catch((err)=>{
+        console.log(err);
+      })
+  };
   return (
     <article>
       <h3>
