@@ -1,11 +1,35 @@
 import { useState, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 function BookmarkDetails() {
-  const [bookmark] = useState([]);
+  const [bookmark, setBookmark] = useState([]);
   let { index } = useParams();
+  let navigate = useNavigate();
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    // http://localhost:3003/bookmarks/0  --> what we want to connect from the backend
+    // console.log(index);
+    // console.log(`${process.env.REACT_APP_API_URL_FROM_OUR_BACKEND}/bookmarks/${index}`)
+    axios.get(`${process.env.REACT_APP_API_URL_FROM_OUR_BACKEND}/bookmarks/${index}`)
+      .then((res)=>{
+        // console.log(res.data);
+        setBookmark(res.data);
+      }).catch(()=>{
+        /* what it looks like when there is no endpoint */
+        navigate("/not-found");
+      })
+
+    /* Equivalent using fetch - just to see difference btwn axios */
+    // fetch(`${process.env.REACT_APP_API_URL_FROM_OUR_BACKEND}/bookmarks/${index}`)
+    //   .then((res)=>res.json())
+    //   .then((data)=>{
+    //     setBookmark(data);
+    //   }).catch(()=>{
+    //     navigate("/not-found")
+    //   })
+
+  }, [index]);
   const handleDelete = () => {};
   return (
     <article>
